@@ -1,0 +1,488 @@
+<!doctype html>
+<html lang="uz">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0b0a10">
+<title>iMaqom</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<style>
+:root{
+  --bg:#0b0a10; --bg2:#14111d; --card:#1a1626; --line:#2c2540;
+  --gold:#d4af37; --gold2:#f6e08a; --text:#f3eee0; --muted:#9a93ad;
+  --ok:#4ade80; --bad:#f87171;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+body{min-height:100vh;padding-bottom:84px}
+.wrap{max-width:640px;margin:0 auto;padding:0 16px}
+header{position:sticky;top:0;z-index:10;background:rgba(11,10,16,.88);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+header .wrap{display:flex;align-items:center;justify-content:space-between;height:58px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:700;font-size:20px;letter-spacing:.3px}
+.logo b{background:linear-gradient(135deg,var(--gold2),var(--gold));-webkit-background-clip:text;background-clip:text;color:transparent}
+.pill{display:flex;align-items:center;gap:6px;border:1px solid var(--gold);color:var(--gold2);padding:6px 12px;border-radius:999px;font-size:14px;font-weight:600;background:rgba(212,175,55,.08)}
+h1{font-size:24px;margin:22px 0 6px}
+h2{font-size:18px;margin:26px 0 12px;display:flex;justify-content:space-between;align-items:baseline}
+h2 small{font-weight:400;color:var(--muted);font-size:13px}
+p{line-height:1.55;color:#d9d3e8}
+.muted{color:var(--muted);font-size:14px}
+.hero{position:relative;overflow:hidden;border-radius:22px;margin-top:16px;border:1px solid var(--line);background:radial-gradient(120% 120% at 80% 0%,#3a2a5a 0%,#1a1426 55%,#0e0b16 100%)}
+.hero svg.art{position:absolute;right:-30px;top:-20px;width:280px;opacity:.95}
+.hero .txt{position:relative;padding:26px 20px 24px;max-width:70%}
+.hero h1{margin:0 0 8px;font-size:26px;line-height:1.2}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;cursor:pointer;font-weight:700;font-size:15px;padding:12px 20px;border-radius:14px;color:#1a1305;background:linear-gradient(135deg,var(--gold2),var(--gold));font-family:inherit}
+.btn.ghost{background:transparent;color:var(--gold2);border:1px solid var(--gold)}
+.btn.small{padding:8px 14px;font-size:13px;border-radius:10px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.svc{position:relative;overflow:hidden;border-radius:18px;border:1px solid var(--line);background:var(--card);padding:0;cursor:pointer;text-align:left;color:inherit;font-family:inherit;transition:transform .15s,border-color .15s}
+.svc:active{transform:scale(.97)}
+.svc:hover{border-color:var(--gold)}
+.svc .pic{height:96px;display:flex;align-items:center;justify-content:center}
+.svc .t{padding:10px 12px 14px;font-weight:600;font-size:15px}
+.svc .t span{display:block;font-weight:400;color:var(--muted);font-size:12px;margin-top:2px}
+.badge{position:absolute;top:8px;right:8px;font-size:11px;background:rgba(0,0,0,.55);border:1px solid var(--gold);color:var(--gold2);padding:2px 8px;border-radius:999px}
+.mq{display:flex;gap:12px;overflow-x:auto;padding-bottom:6px;scroll-snap-type:x mandatory}
+.mq::-webkit-scrollbar{display:none}
+.mq .m{flex:0 0 118px;scroll-snap-align:start;text-align:center;cursor:pointer;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:14px 8px}
+.mq .m svg{width:76px;height:76px}
+.mq .m div{margin-top:8px;font-weight:600;font-size:14px}
+.mq .m small{color:var(--muted);font-size:11px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px;margin-bottom:12px}
+.list .row{display:flex;align-items:center;gap:14px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px;margin-bottom:10px;cursor:pointer}
+.list .row svg{width:56px;height:56px;flex:0 0 56px}
+.list .row .i{flex:1}
+.list .row .i b{display:block;font-size:16px}
+.list .row .i span{color:var(--muted);font-size:13px}
+.chev{color:var(--gold);font-size:20px}
+label{display:block;font-size:13px;color:var(--muted);margin:12px 0 6px}
+input,select,textarea{width:100%;background:var(--bg2);color:var(--text);border:1px solid var(--line);border-radius:12px;padding:12px;font-size:15px;font-family:inherit}
+textarea{min-height:90px;resize:vertical}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--gold)}
+.tabs{display:flex;gap:8px;margin:16px 0}
+.tabs button{flex:1;padding:10px;border-radius:12px;border:1px solid var(--line);background:var(--card);color:var(--muted);font-weight:600;cursor:pointer;font-family:inherit}
+.tabs button.on{border-color:var(--gold);color:var(--gold2);background:rgba(212,175,55,.1)}
+.chords{display:flex;flex-wrap:wrap;gap:10px;margin:10px 0}
+.chord{min-width:70px;text-align:center;padding:12px 14px;border-radius:14px;border:1px solid var(--gold);background:rgba(212,175,55,.08)}
+.chord b{display:block;font-size:20px;color:var(--gold2)}
+.chord span{font-size:12px;color:var(--muted)}
+.out{white-space:pre-wrap;line-height:1.7;background:var(--bg2);border:1px dashed var(--gold);border-radius:14px;padding:14px;margin-top:14px}
+.opt{display:block;width:100%;text-align:left;padding:14px;margin-bottom:10px;border-radius:14px;border:1px solid var(--line);background:var(--bg2);color:var(--text);font-size:15px;cursor:pointer;font-family:inherit}
+.opt.ok{border-color:var(--ok);background:rgba(74,222,128,.12)}
+.opt.bad{border-color:var(--bad);background:rgba(248,113,113,.12)}
+.bar{height:6px;border-radius:6px;background:var(--line);overflow:hidden;margin:10px 0 4px}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--gold),var(--gold2))}
+nav{position:fixed;left:0;right:0;bottom:0;z-index:20;background:rgba(14,11,22,.94);backdrop-filter:blur(14px);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom)}
+nav .wrap{display:flex;justify-content:space-around;padding:6px 8px}
+nav button{flex:1;background:none;border:0;color:var(--muted);display:flex;flex-direction:column;align-items:center;gap:3px;font-size:11px;padding:6px 0;cursor:pointer;font-family:inherit}
+nav button svg{width:24px;height:24px}
+nav button.on{color:var(--gold2)}
+.modal{position:fixed;inset:0;z-index:30;background:rgba(0,0,0,.7);display:none;align-items:flex-end;justify-content:center}
+.modal.show{display:flex}
+.sheet{width:100%;max-width:640px;max-height:88vh;overflow:auto;background:var(--bg2);border-radius:24px 24px 0 0;border:1px solid var(--line);padding:22px 18px 30px}
+.plan{border:1px solid var(--line);border-radius:18px;padding:16px;margin-bottom:12px;background:var(--card)}
+.plan.best{border-color:var(--gold);box-shadow:0 0 0 1px rgba(212,175,55,.3)}
+.plan h3{margin:0 0 4px}
+.plan ul{margin:8px 0 12px;padding-left:18px;color:#d9d3e8;line-height:1.6;font-size:14px}
+.toast{position:fixed;left:50%;bottom:100px;transform:translateX(-50%);background:var(--gold);color:#1a1305;font-weight:700;padding:10px 18px;border-radius:999px;z-index:40;opacity:0;transition:.25s;pointer-events:none;font-size:14px}
+.toast.show{opacity:1}
+.view{display:none}.view.on{display:block}
+.note{font-size:12px;color:var(--muted);border-left:2px solid var(--gold);padding-left:10px;margin:14px 0}
+</style>
+</head>
+<body>
+
+<header><div class="wrap">
+  <div class="logo">
+    <svg width="34" height="34" viewBox="0 0 512 512"><use href="#logo"/></svg>
+    <span>i<b>Maqom</b></span>
+  </div>
+  <div class="pill" onclick="go('profile')">✦ <span id="tokens">0</span> token</div>
+</div></header>
+
+<main class="wrap">
+
+<!-- BOSH SAHIFA -->
+<section class="view on" id="v-home">
+  <div class="hero">
+    <svg class="art" viewBox="0 0 300 300"><use href="#hero-art"/></svg>
+    <div class="txt">
+      <h1>Maqom olamiga xush kelibsiz</h1>
+      <p class="muted" style="margin:0 0 16px">Qo'shiq matni, akkordlar, darslar va maqom kutubxonasi bir joyda.</p>
+      <button class="btn" onclick="go('lessons')">Darsni boshlash</button>
+    </div>
+  </div>
+
+  <h2>Xizmatlar</h2>
+  <div class="grid" id="services"></div>
+
+  <h2>Shashmaqom <small onclick="go('library')" style="cursor:pointer;color:var(--gold2)">Hammasi ›</small></h2>
+  <div class="mq" id="mq-home"></div>
+
+  <h2>Do'stlarni taklif qiling</h2>
+  <div class="card">
+    <p style="margin:0 0 12px">Har bir taklif qilingan do'st uchun token oling.</p>
+    <button class="btn ghost small" onclick="go('profile')">Batafsil</button>
+  </div>
+</section>
+
+<!-- MAQOM KUTUBXONASI -->
+<section class="view" id="v-library">
+  <h1>Maqom kutubxonasi</h1>
+  <p class="muted">Shashmaqom oltita maqomdan iborat. Har birining sahifasini oching.</p>
+  <div class="list" id="mq-list"></div>
+  <div class="note">Maqomlar haqidagi batafsil ma'lumot, audio va ijrochilar ro'yxati mutaxassis tomonidan tekshirilib to'ldiriladi.</div>
+</section>
+
+<!-- DARSLAR -->
+<section class="view" id="v-lessons">
+  <h1>Musiqa darslari</h1>
+  <p class="muted">Qisqa dars o'qing, keyin testdan o'ting. Har to'g'ri javob uchun 1 token olasiz.</p>
+  <div class="bar"><i id="prog" style="width:0"></i></div>
+  <div class="muted" id="prog-t"></div>
+  <div class="list" id="lesson-list" style="margin-top:16px"></div>
+</section>
+
+<!-- STUDIYA -->
+<section class="view" id="v-studio">
+  <h1>Studiya</h1>
+  <div class="tabs">
+    <button class="on" data-tab="lyrics" onclick="tab('lyrics')">Qo'shiq matni</button>
+    <button data-tab="chords" onclick="tab('chords')">Akkordlar</button>
+  </div>
+
+  <div id="t-lyrics">
+    <div class="card">
+      <label>Mavzu</label>
+      <input id="ly-topic" placeholder="Masalan: ona, vatan, sevgi, ayriliq">
+      <label>Shakl</label>
+      <select id="ly-form"><option>Ruboiy (4 misra)</option><option>G'azal (matla)</option><option>Zamonaviy qo'shiq</option></select>
+      <label>Kayfiyat</label>
+      <select id="ly-mood"><option>Lirik</option><option>G'amgin</option><option>Quvnoq</option><option>Ruhiy</option></select>
+      <div style="margin-top:16px"><button class="btn" id="ly-btn" onclick="genLyrics()">Matn yaratish · 5 token</button></div>
+      <div id="ly-out"></div>
+    </div>
+  </div>
+
+  <div id="t-chords" style="display:none">
+    <div class="card">
+      <label>Tonallik</label>
+      <select id="ch-key"></select>
+      <label>Lad</label>
+      <select id="ch-mode"><option value="maj">Major (yorqin)</option><option value="min">Minor (g'amgin)</option></select>
+      <label>Kayfiyat</label>
+      <select id="ch-mood"></select>
+      <div style="margin-top:16px"><button class="btn" onclick="genChords()">Akkord topish · bepul</button></div>
+      <div id="ch-out"></div>
+    </div>
+  </div>
+</section>
+
+<!-- PROFIL -->
+<section class="view" id="v-profile">
+  <h1>Profil</h1>
+  <div class="card">
+    <div class="muted">Balans</div>
+    <div style="font-size:34px;font-weight:800;color:var(--gold2)">✦ <span id="tokens2">0</span></div>
+    <div class="muted">Taklif kodingiz</div>
+    <div style="display:flex;gap:10px;margin-top:6px">
+      <input id="refcode" readonly>
+      <button class="btn small" onclick="copyRef()">Nusxa</button>
+    </div>
+  </div>
+
+  <h2>Obunalar</h2>
+  <div class="plan"><h3>Boshlang'ich</h3><div class="muted">Bepul</div>
+    <ul><li>Maqom kutubxonasi</li><li>Darslar va testlar</li><li>Akkord topish</li></ul></div>
+  <div class="plan best"><h3>Ijodkor</h3><div class="muted">Narxi keyin belgilanadi</div>
+    <ul><li>Har oy ko'proq token</li><li>Qo'shiq matni yaratish</li><li>Fayllar tarixi</li></ul>
+    <button class="btn small" onclick="toast('Tez orada')">Tanlash</button></div>
+  <div class="plan"><h3>Ustoz</h3><div class="muted">Narxi keyin belgilanadi</div>
+    <ul><li>Cheksizga yaqin token</li><li>Shogirdlar uchun darslar</li></ul>
+    <button class="btn small ghost" onclick="toast('Tez orada')">Tanlash</button></div>
+
+  <h2>Fayllarim <small onclick="clearHist()" style="cursor:pointer">Tozalash</small></h2>
+  <div id="hist"></div>
+</section>
+
+</main>
+
+<nav><div class="wrap" id="nav"></div></nav>
+
+<div class="modal" id="modal" onclick="if(event.target===this)closeModal()"><div class="sheet" id="sheet"></div></div>
+<div class="toast" id="toast"></div>
+
+<!-- SVG RASMLAR -->
+<svg width="0" height="0" style="position:absolute">
+<defs>
+  <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0" stop-color="#f6e08a"/><stop offset=".5" stop-color="#d4af37"/><stop offset="1" stop-color="#8a6a14"/>
+  </linearGradient>
+
+  <g id="logo">
+    <rect width="512" height="512" rx="112" fill="#14111d"/>
+    <g transform="translate(256 256)" fill="none" stroke="url(#gold)" stroke-width="12" stroke-linejoin="round">
+      <polygon points="0,-190 45,-120 125,-142 112,-62 190,-45 135,15 175,85 95,92 75,170 0,125 -75,170 -95,92 -175,85 -135,15 -190,-45 -112,-62 -125,-142 -45,-120"/>
+    </g>
+    <g transform="translate(256 262) rotate(-18)" fill="url(#gold)">
+      <ellipse cx="0" cy="48" rx="46" ry="62"/><rect x="-7" y="-120" width="14" height="108" rx="6"/>
+    </g>
+  </g>
+
+  <g id="hero-art">
+    <g transform="translate(150 150)" fill="none" stroke="url(#gold)" stroke-linejoin="round">
+      <polygon stroke-width="2" opacity=".5" points="0,-140 34,-88 94,-104 84,-46 142,-34 100,10 130,64 70,68 56,126 0,92 -56,126 -70,68 -130,64 -100,10 -142,-34 -84,-46 -94,-104 -34,-88"/>
+      <polygon stroke-width="2.5" points="0,-110 27,-70 74,-82 66,-36 112,-27 79,8 102,50 55,54 44,99 0,72 -44,99 -55,54 -102,50 -79,8 -112,-27 -66,-36 -74,-82 -27,-70"/>
+      <circle r="62" stroke-width="1.5" opacity=".6"/><circle r="40" stroke-width="1.5" opacity=".4"/>
+    </g>
+    <g transform="translate(160 160) rotate(-24)">
+      <ellipse cx="0" cy="40" rx="30" ry="42" fill="url(#gold)"/>
+      <ellipse cx="0" cy="44" rx="9" ry="9" fill="#14111d"/>
+      <rect x="-5" y="-86" width="10" height="80" rx="4" fill="url(#gold)"/>
+      <line x1="-1.5" y1="-80" x2="-1.5" y2="70" stroke="#14111d" stroke-width="1.3"/>
+      <line x1="2" y1="-80" x2="2" y2="70" stroke="#14111d" stroke-width="1.3"/>
+    </g>
+  </g>
+
+  <!-- xizmat rasmlari -->
+  <g id="ic-lyrics">
+    <rect x="-34" y="-36" width="68" height="72" rx="8" fill="none" stroke="url(#gold)" stroke-width="3"/>
+    <g stroke="url(#gold)" stroke-width="3" stroke-linecap="round"><line x1="-20" y1="-18" x2="20" y2="-18"/><line x1="-20" y1="-4" x2="14" y2="-4"/><line x1="-20" y1="10" x2="20" y2="10"/><line x1="-20" y1="24" x2="6" y2="24"/></g>
+    <path d="M20 40 l22 -42 l8 6 l-22 42 l-10 2z" fill="url(#gold)"/>
+  </g>
+  <g id="ic-chords">
+    <rect x="-38" y="-30" width="76" height="60" rx="6" fill="none" stroke="url(#gold)" stroke-width="3"/>
+    <g stroke="url(#gold)" stroke-width="2.5"><line x1="-38" y1="-10" x2="38" y2="-10"/><line x1="-38" y1="10" x2="38" y2="10"/><line x1="-13" y1="-30" x2="-13" y2="30"/><line x1="13" y1="-30" x2="13" y2="30"/></g>
+    <circle cx="-25" cy="-20" r="6" fill="url(#gold)"/><circle cx="0" cy="0" r="6" fill="url(#gold)"/><circle cx="25" cy="20" r="6" fill="url(#gold)"/>
+  </g>
+  <g id="ic-lessons">
+    <path d="M-40 -22 L0 -40 L40 -22 L0 -4z" fill="url(#gold)"/>
+    <path d="M-24 -10 v22 c0 10 48 10 48 0 v-22" fill="none" stroke="url(#gold)" stroke-width="3"/>
+    <line x1="40" y1="-22" x2="40" y2="14" stroke="url(#gold)" stroke-width="3"/><circle cx="40" cy="18" r="4" fill="url(#gold)"/>
+  </g>
+  <g id="ic-library">
+    <g transform="rotate(-20)"><ellipse cx="0" cy="22" rx="20" ry="27" fill="url(#gold)"/><rect x="-4" y="-46" width="8" height="52" rx="3" fill="url(#gold)"/><ellipse cx="0" cy="24" rx="6" ry="6" fill="#1a1626"/></g>
+    <circle cx="28" cy="-10" r="22" fill="none" stroke="url(#gold)" stroke-width="2.5" stroke-dasharray="4 4"/>
+  </g>
+
+  <!-- nav ikonlari -->
+  <g id="n-home"><path d="M3 11l9-8 9 8v10h-6v-6H9v6H3z" fill="currentColor"/></g>
+  <g id="n-library"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 5l2 5 5 .5-4 3.5 1.2 5L12 16l-4.2 3 1.2-5-4-3.5 5-.5z" fill="currentColor"/></g>
+  <g id="n-lessons"><path d="M2 8l10-5 10 5-10 5z" fill="currentColor"/><path d="M6 12v5c0 2 12 2 12 0v-5" fill="none" stroke="currentColor" stroke-width="2"/></g>
+  <g id="n-studio"><rect x="9" y="2" width="6" height="12" rx="3" fill="currentColor"/><path d="M5 11a7 7 0 0014 0M12 18v4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></g>
+  <g id="n-profile"><circle cx="12" cy="8" r="4.5" fill="currentColor"/><path d="M3 21c0-5 4-7 9-7s9 2 9 7z" fill="currentColor"/></g>
+</defs>
+</svg>
+
+<script>
+/* ====== SOZLAMA ====== */
+// Haqiqiy AI uchun backend manzilini shu yerga yozing. Bo'sh bo'lsa, matn yaratish namuna rejimida ishlaydi.
+const CONFIG = { API_URL: "" };
+
+/* ====== MA'LUMOT ====== */
+let MAQOMS = [
+  {n:"Buzruk", i:1, c:["#c9a227","#7a1f3d"], t:"Shashmaqomning birinchi maqomi"},
+  {n:"Rost",   i:2, c:["#d4af37","#1f6f5c"], t:"Shashmaqomning ikkinchi maqomi"},
+  {n:"Navo",   i:3, c:["#f6e08a","#4b2a7a"], t:"Shashmaqomning uchinchi maqomi"},
+  {n:"Dugoh",  i:4, c:["#d4af37","#a8442b"], t:"Shashmaqomning to'rtinchi maqomi"},
+  {n:"Segoh",  i:5, c:["#e8c85a","#1e4f8a"], t:"Shashmaqomning beshinchi maqomi"},
+  {n:"Iroq",   i:6, c:["#d4af37","#5a2a62"], t:"Shashmaqomning oltinchi maqomi"},
+];
+
+let LESSONS = [
+  {t:"Shashmaqom nima?", s:"Asosiy tushuncha", b:"Shashmaqom — oltita maqomdan iborat katta musiqiy turkum. U Buxoroda shakllangan deb hisoblanadi. Har bir maqom ikki qismga bo'linadi: Mushkilot va Nasr.",
+   q:[{q:"Shashmaqom nechta maqomdan iborat?",o:["4","6","8","12"],a:1},{q:"Maqom qaysi ikki qismga bo'linadi?",o:["Mushkilot va Nasr","Ashula va Raqs","Kirish va Yakun","Matla va Maqta"],a:0}]},
+  {t:"Maqom nomlari", s:"Oltita maqom", b:"Shashmaqom tarkibi: Buzruk, Rost, Navo, Dugoh, Segoh va Iroq. Ularni shu tartibda yodlash foydali.",
+   q:[{q:"Quyidagilardan qaysi biri Shashmaqom tarkibiga kiradi?",o:["Rapsodiya","Segoh","Sonata","Nokturn"],a:1},{q:"Shashmaqomdagi birinchi maqom qaysi?",o:["Iroq","Navo","Buzruk","Rost"],a:2}]},
+  {t:"Cholg'ular", s:"Dutor, doira, nay", b:"Dutor — ikki torli cholg'u. Doira — zarbli cholg'u. Nay — damli cholg'u. Maqom ijrosida ular ko'pincha birga ishlatiladi.",
+   q:[{q:"Dutor necha torli?",o:["1","2","3","6"],a:1},{q:"Doira qaysi guruh cholg'usi?",o:["Damli","Torli","Zarbli","Klavishli"],a:2}]},
+  {t:"She'riyat shakllari", s:"G'azal va ruboiy", b:"Maqom ijrosida ko'pincha g'azal aytiladi. Ruboiy — to'rt misrali she'r. Alisher Navoiy eski o'zbek tilida ijod qilgan.",
+   q:[{q:"Ruboiy necha misradan iborat?",o:["2","4","6","8"],a:1},{q:"Maqom ijrosida ko'pincha qaysi she'riy shakl aytiladi?",o:["G'azal","Roman","Hikoya","Doston-nasr"],a:0}]},
+  {t:"Usul (ritm)", s:"Doira va usul", b:"Usul — musiqadagi ritmik qolip. Doira usulni ushlab turadi, ijrochi esa ohangni shu ritm ustiga quradi.",
+   q:[{q:"Usul nima?",o:["Ritmik qolip","Nota kaliti","Ovoz turi","Cholg'u nomi"],a:0},{q:"Usulni ko'pincha qaysi cholg'u ushlab turadi?",o:["Nay","Doira","Dutor","Rubob"],a:1}]},
+];
+
+let SET = {lyricCost:5, tokenPerCorrect:1};
+
+const NOTES = ["C","C#","D","D#","E","F","F#","G","G#","A","A#","B"];
+const SCALES = {
+  maj:{off:[0,2,4,5,7,9,11], q:["","m","m","","","m","dim"], rn:["I","ii","iii","IV","V","vi","vii°"]},
+  min:{off:[0,2,3,5,7,8,10], q:["m","dim","","m","m","",""], rn:["i","ii°","III","iv","v","VI","VII"]},
+};
+const MOODS = {
+  maj:{"Lirik":[0,5,3,4],"Quvnoq":[0,4,5,3],"Ravshan":[0,3,4,0],"Ohista":[0,2,3,4]},
+  min:{"G'amgin":[0,5,2,6],"Ruhiy":[0,3,5,4],"Dramatik":[0,3,4,0],"Sharqona":[0,6,5,4]},
+};
+
+/* ====== HOLAT ====== */
+const S = (()=>{ try{ return JSON.parse(localStorage.getItem("imaqom")) }catch(e){return null} })() || {tokens:20, done:{}, hist:[], ref:"IM"+Math.random().toString(36).slice(2,7).toUpperCase()};
+const save = ()=>{ try{ localStorage.setItem("imaqom", JSON.stringify(S)) }catch(e){} };
+const $ = s=>document.querySelector(s);
+const $$ = s=>[...document.querySelectorAll(s)];
+
+/* ====== YORDAMCHILAR ====== */
+function star(m, size){
+  const n = m.i+5, R=44, r=26, pts=[];
+  for(let k=0;k<n*2;k++){ const rad=k%2?r:R, a=Math.PI*k/n-Math.PI/2; pts.push((50+rad*Math.cos(a)).toFixed(1)+","+(50+rad*Math.sin(a)).toFixed(1)); }
+  const id="g"+m.i+Math.random().toString(36).slice(2,5);
+  return `<svg viewBox="0 0 100 100"><defs><radialGradient id="${id}" cx="50%" cy="40%" r="70%"><stop offset="0" stop-color="${m.c[1]}"/><stop offset="1" stop-color="#14111d"/></radialGradient></defs>
+  <circle cx="50" cy="50" r="48" fill="url(#${id})" stroke="${m.c[0]}" stroke-width="1.5"/>
+  <polygon points="${pts.join(" ")}" fill="none" stroke="${m.c[0]}" stroke-width="1.6" stroke-linejoin="round"/>
+  <circle cx="50" cy="50" r="15" fill="none" stroke="${m.c[0]}" stroke-width="1.2" opacity=".7"/>
+  <text x="50" y="56" text-anchor="middle" font-size="18" font-weight="700" fill="${m.c[0]}" font-family="Georgia,serif">${m.i}</text></svg>`;
+}
+function toast(t){ const e=$("#toast"); e.textContent=t; e.classList.add("show"); setTimeout(()=>e.classList.remove("show"),1800); }
+function setTokens(){ $("#tokens").textContent=S.tokens; $("#tokens2").textContent=S.tokens; save(); }
+function openModal(h){ $("#sheet").innerHTML=h; $("#modal").classList.add("show"); }
+function closeModal(){ $("#modal").classList.remove("show"); }
+function esc(s){ return String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])); }
+
+/* ====== NAVIGATSIYA ====== */
+const NAV=[["home","Bosh"],["library","Maqom"],["lessons","Darslar"],["studio","Studiya"],["profile","Profil"]];
+$("#nav").innerHTML = NAV.map(([k,l])=>`<button data-v="${k}" onclick="go('${k}')"><svg viewBox="0 0 24 24"><use href="#n-${k}"/></svg>${l}</button>`).join("");
+function go(v){
+  $$(".view").forEach(e=>e.classList.toggle("on", e.id==="v-"+v));
+  $$("nav button").forEach(b=>b.classList.toggle("on", b.dataset.v===v));
+  scrollTo({top:0});
+  if(v==="lessons") renderLessons();
+  if(v==="profile") renderHist();
+}
+
+/* ====== BOSH SAHIFA ====== */
+const SVCS=[
+  {k:"library", ic:"ic-library", t:"Maqom kutubxonasi", s:"6 maqom"},
+  {k:"lessons", ic:"ic-lessons", t:"Darslar va testlar", s:"O'rganing"},
+  {k:"studio",  ic:"ic-lyrics",  t:"Qo'shiq matni", s:"AI yordamchi", b:"5 token", tab:"lyrics"},
+  {k:"studio",  ic:"ic-chords",  t:"Akkordlar", s:"Tonallik bo'yicha", b:"Bepul", tab:"chords"},
+];
+function renderServices(){ $("#services").innerHTML = SVCS.map((x,i)=>`<button class="svc" onclick="openSvc(${i})">
+  ${x.b?`<span class="badge">${x.b}</span>`:""}
+  <div class="pic" style="background:radial-gradient(circle at 50% 40%,#2c2146,#1a1626)"><svg width="84" height="84" viewBox="-50 -50 100 100"><use href="#${x.ic}"/></svg></div>
+  <div class="t">${x.t}<span>${x.s}</span></div></button>`).join(""); }
+renderServices();
+function openSvc(i){ const x=SVCS[i]; go(x.k); if(x.tab) tab(x.tab); }
+
+function renderMaqoms(){ $("#mq-home").innerHTML = MAQOMS.map(m=>`<div class="m" onclick="showMaqom(${m.i-1})">${star(m)}<div>${m.n}</div><small>${m.i}-maqom</small></div>`).join("");
+$("#mq-list").innerHTML = MAQOMS.map(m=>`<div class="row" onclick="showMaqom(${m.i-1})">${star(m)}<div class="i"><b>${m.n}</b><span>${m.t}</span></div><span class="chev">›</span></div>`).join(""); }
+renderMaqoms();
+
+function showMaqom(k){
+  const m=MAQOMS[k];
+  openModal(`<div style="text-align:center"><div style="width:110px;margin:0 auto">${star(m)}</div>
+  <h1 style="margin:10px 0 4px">${esc(m.n)}</h1><div class="muted">${esc(m.t)}</div></div>
+  <div class="card" style="margin-top:18px"><b>Tuzilishi</b><p style="margin:6px 0 0">Har bir maqom ikki qismdan iborat: Mushkilot va Nasr.</p></div>
+  ${m.info?`<div class="card"><b>Tarix va ma'lumot</b><p style="margin:6px 0 0;white-space:pre-wrap">${esc(m.info)}</p></div>`:`<div class="card"><b>Tarix, ijrochilar, audio</b><p class="muted" style="margin:6px 0 0">Bu bo'lim mutaxassis tomonidan tekshirilgan ma'lumot bilan to'ldiriladi.</p></div>`}
+  <button class="btn" style="width:100%" onclick="closeModal();go('lessons')">Darslarga o'tish</button>`);
+}
+
+/* ====== DARSLAR ====== */
+function renderLessons(){
+  const d=Object.keys(S.done).length;
+  $("#prog").style.width=(d/LESSONS.length*100)+"%";
+  $("#prog-t").textContent=`${d} / ${LESSONS.length} dars tugatildi`;
+  $("#lesson-list").innerHTML=LESSONS.map((l,i)=>`<div class="row" onclick="openLesson(${i})">
+    <svg viewBox="-50 -50 100 100"><use href="#ic-lessons"/></svg>
+    <div class="i"><b>${i+1}. ${l.t}</b><span>${l.s}</span></div>
+    <span class="chev">${S.done[i]!=null?"✓":"›"}</span></div>`).join("");
+}
+function openLesson(i){
+  const l=LESSONS[i];
+  openModal(`<h1 style="margin-top:0">${esc(l.t)}</h1><p style="white-space:pre-wrap">${esc(l.b)}</p>
+  <button class="btn" style="width:100%" onclick="startQuiz(${i},0,0)">Testni boshlash</button>`);
+}
+function startQuiz(i,qi,score){
+  const l=LESSONS[i];
+  if(qi>=l.q.length){
+    const first = S.done[i]==null;
+    if(first){ S.tokens+=score*SET.tokenPerCorrect; S.done[i]=score; setTokens(); }
+    renderLessons();
+    return openModal(`<div style="text-align:center"><div style="font-size:56px">${score===l.q.length?"🏆":"👍"}</div>
+    <h1>${score} / ${l.q.length}</h1><p class="muted">${first?`+${score*SET.tokenPerCorrect} token oldingiz`:"Bu darsdan token oldin berilgan"}</p>
+    <button class="btn" onclick="closeModal()">Yopish</button></div>`);
+  }
+  const q=l.q[qi];
+  openModal(`<div class="muted">Savol ${qi+1} / ${l.q.length}</div><h2 style="margin-top:6px">${esc(q.q)}</h2>
+  ${q.o.map((o,k)=>`<button class="opt" onclick="answer(${i},${qi},${k},${score},this)">${esc(o)}</button>`).join("")}`);
+}
+function answer(i,qi,k,score,el){
+  const q=LESSONS[i].q[qi], ok=k===q.a;
+  $$(".opt").forEach((b,j)=>{ b.disabled=true; if(j===q.a) b.classList.add("ok"); });
+  if(!ok) el.classList.add("bad");
+  setTimeout(()=>startQuiz(i,qi+1,score+(ok?1:0)),900);
+}
+
+/* ====== STUDIYA ====== */
+function tab(t){
+  $$(".tabs button").forEach(b=>b.classList.toggle("on",b.dataset.tab===t));
+  $("#t-lyrics").style.display=t==="lyrics"?"block":"none";
+  $("#t-chords").style.display=t==="chords"?"block":"none";
+}
+$("#ch-key").innerHTML=NOTES.map(n=>`<option>${n}</option>`).join("");
+function fillMoods(){ $("#ch-mood").innerHTML=Object.keys(MOODS[$("#ch-mode").value]).map(m=>`<option>${m}</option>`).join(""); }
+$("#ch-mode").onchange=fillMoods; fillMoods();
+
+function genChords(){
+  const key=NOTES.indexOf($("#ch-key").value), mode=$("#ch-mode").value, mood=$("#ch-mood").value;
+  const sc=SCALES[mode], prog=MOODS[mode][mood];
+  const items=prog.map(d=>({n:NOTES[(key+sc.off[d])%12]+sc.q[d], r:sc.rn[d]}));
+  const all=sc.off.map((o,d)=>NOTES[(key+o)%12]+sc.q[d]).join("  ");
+  $("#ch-out").innerHTML=`<div class="chords">${items.map(c=>`<div class="chord"><b>${c.n}</b><span>${c.r}</span></div>`).join("")}</div>
+  <div class="muted">Shu tonallikdagi barcha akkordlar:</div><div style="margin:6px 0 12px;color:var(--gold2)">${all}</div>
+  <button class="btn ghost small" id="ch-save">Fayllarimga saqlash</button>`;
+  $("#ch-save").onclick=()=>saveHist("Akkordlar: "+NOTES[key]+" "+(mode==="maj"?"major":"minor"), items.map(c=>c.n).join(" – "));
+}
+
+async function genLyrics(){
+  const topic=$("#ly-topic").value.trim();
+  if(!topic) return toast("Mavzuni yozing");
+  if(S.tokens<SET.lyricCost) return toast("Token yetarli emas");
+  const form=$("#ly-form").value, mood=$("#ly-mood").value;
+  let text;
+  try{
+    if(CONFIG.API_URL){
+      const r=await fetch(CONFIG.API_URL,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({topic,form,mood})});
+      text=(await r.json()).text;
+    }
+  }catch(e){ return toast("Xizmatga ulanib bo'lmadi"); }
+  let demo=false;
+  if(!text){
+    demo=true;
+    text=`(${form}, ${mood.toLowerCase()} kayfiyat)\n\n${topic[0].toUpperCase()+topic.slice(1)} haqida birinchi misra shu yerda bo'ladi,\nIkkinchi misra unga qofiyadosh bo'ladi.\nUchinchi misra fikrni davom ettiradi,\nTo'rtinchi misra esa yakun yasaydi.`;
+  }
+  S.tokens-=SET.lyricCost; setTokens();
+  $("#ly-out").innerHTML=`<div class="out">${esc(text)}</div>
+  ${demo?`<div class="note">Bu namuna ko'rinishi. Haqiqiy AI matn uchun serverga ulanish kerak (CONFIG.API_URL).</div>`:""}
+  <button class="btn ghost small" id="ly-save">Fayllarimga saqlash</button>`;
+  $("#ly-save").onclick=()=>saveHist("Matn: "+topic,text);
+}
+
+/* ====== PROFIL ====== */
+function saveHist(t,b){ S.hist.unshift({t,b,d:new Date().toLocaleDateString("uz")}); S.hist=S.hist.slice(0,50); save(); toast("Saqlandi"); }
+function renderHist(){
+  $("#refcode").value=S.ref;
+  $("#hist").innerHTML=S.hist.length?S.hist.map((h,i)=>`<div class="card" onclick="openHist(${i})"><b>${esc(h.t)}</b><div class="muted">${h.d}</div></div>`).join(""):`<p class="muted">Hali fayl yo'q.</p>`;
+}
+function openHist(i){ const h=S.hist[i]; openModal(`<h2 style="margin-top:0">${esc(h.t)}</h2><div class="out">${esc(h.b)}</div>`); }
+function clearHist(){ S.hist=[]; save(); renderHist(); }
+function copyRef(){ navigator.clipboard&&navigator.clipboard.writeText(S.ref); toast("Nusxalandi"); }
+
+/* ====== BOSHLASH ====== */
+async function loadData(){
+  try{
+    const r=await fetch("data.json?"+Date.now(),{cache:"no-store"});
+    if(r.ok){
+      const d=await r.json();
+      if(Array.isArray(d.maqoms)&&d.maqoms.length) MAQOMS=d.maqoms;
+      if(Array.isArray(d.lessons)&&d.lessons.length) LESSONS=d.lessons;
+      if(d.settings) SET=Object.assign(SET,d.settings);
+    }
+  }catch(e){}
+  SVCS[2].b=SET.lyricCost+" token";
+  $("#ly-btn").textContent="Matn yaratish \u00b7 "+SET.lyricCost+" token";
+  renderMaqoms(); renderServices(); renderLessons();
+}
+setTokens(); go("home"); loadData();
+if("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(()=>{});
+</script>
+</body>
+</html>

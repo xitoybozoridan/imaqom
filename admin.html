@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="uz">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#0b0a10">
+<title>iMaqom Admin</title>
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<style>
+:root{--bg:#0b0a10;--bg2:#14111d;--card:#1a1626;--line:#2c2540;--gold:#d4af37;--gold2:#f6e08a;--text:#f3eee0;--muted:#9a93ad;--ok:#4ade80;--bad:#f87171}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+body{padding-bottom:60px}
+.wrap{max-width:820px;margin:0 auto;padding:0 16px}
+header{position:sticky;top:0;z-index:10;background:rgba(11,10,16,.94);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+header .wrap{display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:58px;flex-wrap:wrap;padding-top:8px;padding-bottom:8px}
+.logo{font-weight:700;font-size:18px}.logo b{color:var(--gold2)}
+.logo small{color:var(--muted);font-weight:400;margin-left:6px}
+.bar{display:flex;gap:8px;flex-wrap:wrap}
+.btn{border:0;cursor:pointer;font-weight:700;font-size:14px;padding:10px 16px;border-radius:12px;color:#1a1305;background:linear-gradient(135deg,var(--gold2),var(--gold));font-family:inherit}
+.btn.ghost{background:transparent;color:var(--gold2);border:1px solid var(--gold)}
+.btn.sm{padding:6px 10px;font-size:12px;border-radius:9px}
+.btn.del{background:transparent;color:var(--bad);border:1px solid var(--bad)}
+.tabs{display:flex;gap:8px;margin:16px 0}
+.tabs button{flex:1;padding:11px;border-radius:12px;border:1px solid var(--line);background:var(--card);color:var(--muted);font-weight:600;cursor:pointer;font-family:inherit}
+.tabs button.on{border-color:var(--gold);color:var(--gold2);background:rgba(212,175,55,.1)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;margin-bottom:12px}
+.card .top{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:6px}
+.acts{display:flex;gap:6px}
+label{display:block;font-size:12px;color:var(--muted);margin:10px 0 5px}
+input[type=text],input[type=number],textarea{width:100%;background:var(--bg2);color:var(--text);border:1px solid var(--line);border-radius:10px;padding:10px;font-size:14px;font-family:inherit}
+textarea{min-height:80px;resize:vertical}
+input:focus,textarea:focus{outline:none;border-color:var(--gold)}
+input[type=color]{width:56px;height:38px;border:1px solid var(--line);background:var(--bg2);border-radius:8px;padding:2px}
+.row2{display:flex;gap:16px;flex-wrap:wrap;align-items:flex-end}
+.q{border:1px dashed var(--line);border-radius:12px;padding:12px;margin-top:10px}
+.opt{display:flex;align-items:center;gap:8px;margin-top:6px}
+.opt input[type=radio]{accent-color:var(--gold);width:18px;height:18px;flex:0 0 18px}
+.note{font-size:13px;color:var(--muted);border-left:2px solid var(--gold);padding-left:10px;margin:12px 0;line-height:1.5}
+.msg{margin:10px 0;padding:10px 12px;border-radius:10px;font-size:14px;display:none;white-space:pre-wrap}
+.msg.ok{display:block;background:rgba(74,222,128,.12);border:1px solid var(--ok)}
+.msg.bad{display:block;background:rgba(248,113,113,.12);border:1px solid var(--bad)}
+.panel{display:none}.panel.on{display:block}
+#status{font-size:12px;color:var(--muted)}
+h2{font-size:18px;margin:6px 0 4px}
+ol,ul{line-height:1.7;color:#d9d3e8}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+  <div class="logo">i<b>Maqom</b><small>Admin</small> <span id="status"></span></div>
+  <div class="bar">
+    <button class="btn ghost sm" onclick="document.getElementById('imp').click()">Import</button>
+    <button class="btn ghost sm" onclick="resetFromServer()">Serverdagisini yuklash</button>
+    <button class="btn" onclick="exportJson()">data.json yuklab olish</button>
+    <input type="file" id="imp" accept=".json,application/json" hidden>
+  </div>
+</div></header>
+
+<main class="wrap">
+  <div id="msg" class="msg"></div>
+  <div class="tabs" id="tabs">
+    <button class="on" data-t="maqoms">Maqomlar</button>
+    <button data-t="lessons">Darslar</button>
+    <button data-t="settings">Sozlamalar</button>
+    <button data-t="help">Qanday ishlaydi</button>
+  </div>
+
+  <section class="panel on" id="p-maqoms"></section>
+  <section class="panel" id="p-lessons"></section>
+  <section class="panel" id="p-settings"></section>
+  <section class="panel" id="p-help">
+    <h2>Qanday ishlaydi</h2>
+    <ol>
+      <li>Bu sahifada maqom, dars, test va sozlamalarni tahrirlaysiz. O'zgarishlar shu brauzerda qoralama sifatida saqlanadi.</li>
+      <li>Tugatgach <b>data.json yuklab olish</b> tugmasini bosing.</li>
+      <li>Yuklangan <code>data.json</code> faylini GitHub'dagi ilova papkasidagi eski <code>data.json</code> o'rniga qo'ying (Upload files).</li>
+      <li>Bir-ikki daqiqadan keyin ilova yangilanadi. Foydalanuvchilar ilovani qayta ochganda yangi kontentni ko'radi.</li>
+    </ol>
+    <div class="note">Bu server bo'lmagan oddiy variant. Shu sabab foydalanuvchilar ro'yxati, token balansi, to'lovlar va statistika bu yerda yo'q. Ular uchun keyinroq server (masalan Supabase yoki Firebase) ulanadi.</div>
+    <div class="note">Kimdir admin.html sahifasini ochsa ham, ilovani o'zgartira olmaydi: jonli ilova faqat siz GitHub'ga yuklagan data.json bilan o'zgaradi. Baribir, admin.html havolasini ochiq tarqatmang.</div>
+  </section>
+</main>
+
+<script>
+const KEY="imaqom_admin_draft";
+const $=s=>document.querySelector(s);
+const $$=s=>[...document.querySelectorAll(s)];
+let D=null, tabNow="maqoms";
+
+const DEFAULTS={settings:{lyricCost:5,tokenPerCorrect:1},maqoms:[],lessons:[]};
+
+function esc(s){return String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))}
+function show(t,kind){const m=$("#msg");m.className="msg "+kind;m.textContent=t;if(kind==="ok")setTimeout(()=>{m.className="msg"},3500)}
+function saveDraft(){try{localStorage.setItem(KEY,JSON.stringify(D));$("#status").textContent="· qoralama saqlandi"}catch(e){$("#status").textContent="· qoralama saqlanmadi"}}
+function norm(d){
+  const o={settings:Object.assign({},DEFAULTS.settings,d&&d.settings),maqoms:[],lessons:[]};
+  (d&&d.maqoms||[]).forEach(m=>o.maqoms.push({n:m.n||"",t:m.t||"",info:m.info||"",c:[(m.c&&m.c[0])||"#d4af37",(m.c&&m.c[1])||"#4b2a7a"]}));
+  (d&&d.lessons||[]).forEach(l=>o.lessons.push({t:l.t||"",s:l.s||"",b:l.b||"",q:(l.q||[]).map(q=>({q:q.q||"",o:[0,1,2,3].map(k=>(q.o&&q.o[k])||""),a:Number.isInteger(q.a)?q.a:0}))}));
+  return o;
+}
+function setP(path,val){const k=path.split(".");let o=D;for(let i=0;i<k.length-1;i++)o=o[k[i]];o[k[k.length-1]]=val;saveDraft()}
+function move(arr,i,d){const j=i+d;if(j<0||j>=arr.length)return;[arr[i],arr[j]]=[arr[j],arr[i]]}
+
+function renderMaqoms(){
+  $("#p-maqoms").innerHTML=D.maqoms.map((m,i)=>`<div class="card">
+    <div class="top"><b>${i+1}-maqom</b><span class="acts">
+      <button class="btn ghost sm" data-a="mup" data-i="${i}">↑</button>
+      <button class="btn ghost sm" data-a="mdn" data-i="${i}">↓</button>
+      <button class="btn del sm" data-a="mdel" data-i="${i}">O'chirish</button></span></div>
+    <label>Nomi</label><input type="text" data-p="maqoms.${i}.n" value="${esc(m.n)}">
+    <label>Qisqa tavsif</label><input type="text" data-p="maqoms.${i}.t" value="${esc(m.t)}">
+    <label>Tarix va ma'lumot (ilovada maqom sahifasida ko'rinadi)</label><textarea data-p="maqoms.${i}.info">${esc(m.info)}</textarea>
+    <div class="row2"><div><label>Rang 1</label><input type="color" data-p="maqoms.${i}.c.0" value="${esc(m.c[0])}"></div>
+    <div><label>Rang 2</label><input type="color" data-p="maqoms.${i}.c.1" value="${esc(m.c[1])}"></div></div>
+  </div>`).join("")+`<button class="btn" data-a="madd">+ Maqom qo'shish</button>`;
+}
+function renderLessons(){
+  $("#p-lessons").innerHTML=D.lessons.map((l,i)=>`<div class="card">
+    <div class="top"><b>${i+1}-dars</b><span class="acts">
+      <button class="btn ghost sm" data-a="lup" data-i="${i}">↑</button>
+      <button class="btn ghost sm" data-a="ldn" data-i="${i}">↓</button>
+      <button class="btn del sm" data-a="ldel" data-i="${i}">O'chirish</button></span></div>
+    <label>Sarlavha</label><input type="text" data-p="lessons.${i}.t" value="${esc(l.t)}">
+    <label>Qisqa izoh</label><input type="text" data-p="lessons.${i}.s" value="${esc(l.s)}">
+    <label>Dars matni</label><textarea data-p="lessons.${i}.b">${esc(l.b)}</textarea>
+    ${l.q.map((q,j)=>`<div class="q">
+      <div class="top"><b>Savol ${j+1}</b><button class="btn del sm" data-a="qdel" data-i="${i}" data-j="${j}">O'chirish</button></div>
+      <input type="text" data-p="lessons.${i}.q.${j}.q" value="${esc(q.q)}" placeholder="Savol matni">
+      ${q.o.map((o,k)=>`<div class="opt"><input type="radio" name="r-${i}-${j}" data-p="lessons.${i}.q.${j}.a" data-num="1" value="${k}" ${q.a===k?"checked":""} title="To'g'ri javob">
+        <input type="text" data-p="lessons.${i}.q.${j}.o.${k}" value="${esc(o)}" placeholder="${k+1}-javob variant"></div>`).join("")}
+      <div class="note" style="margin:8px 0 0">To'g'ri javobni chap tomondagi doira bilan belgilang. Kamida 2 ta variant to'ldirilsin.</div>
+    </div>`).join("")}
+    <div style="margin-top:10px"><button class="btn ghost sm" data-a="qadd" data-i="${i}">+ Savol qo'shish</button></div>
+  </div>`).join("")+`<button class="btn" data-a="ladd">+ Dars qo'shish</button>`;
+}
+function renderSettings(){
+  $("#p-settings").innerHTML=`<div class="card">
+    <label>Qo'shiq matni yaratish narxi (token)</label><input type="number" min="0" data-p="settings.lyricCost" data-num="1" value="${esc(D.settings.lyricCost)}">
+    <label>Testda har to'g'ri javob uchun beriladigan token</label><input type="number" min="0" data-p="settings.tokenPerCorrect" data-num="1" value="${esc(D.settings.tokenPerCorrect)}">
+    <div class="note">Boshlang'ich token (20) hozircha ilova kodida belgilangan. Foydalanuvchi hisoblari yo'qligi uchun uni serversiz o'zgartirib bo'lmaydi.</div>
+  </div>`;
+}
+function renderAll(){renderMaqoms();renderLessons();renderSettings()}
+
+document.addEventListener("input",e=>{
+  const p=e.target.dataset&&e.target.dataset.p;if(!p)return;
+  let v=e.target.value;if(e.target.dataset.num)v=Math.max(0,parseInt(v,10)||0);
+  if(e.target.type==="radio"&&!e.target.checked)return;
+  setP(p,v);
+});
+document.addEventListener("click",e=>{
+  const b=e.target.closest("[data-a]");if(!b)return;
+  const a=b.dataset.a,i=+b.dataset.i,j=+b.dataset.j;
+  if(a==="mup")move(D.maqoms,i,-1);
+  else if(a==="mdn")move(D.maqoms,i,1);
+  else if(a==="mdel"){if(!confirm("Maqom o'chirilsinmi?"))return;D.maqoms.splice(i,1)}
+  else if(a==="madd")D.maqoms.push({n:"Yangi maqom",t:"",info:"",c:["#d4af37","#4b2a7a"]});
+  else if(a==="lup")move(D.lessons,i,-1);
+  else if(a==="ldn")move(D.lessons,i,1);
+  else if(a==="ldel"){if(!confirm("Dars o'chirilsinmi?"))return;D.lessons.splice(i,1)}
+  else if(a==="ladd")D.lessons.push({t:"Yangi dars",s:"",b:"",q:[{q:"",o:["","","",""],a:0}]});
+  else if(a==="qadd")D.lessons[i].q.push({q:"",o:["","","",""],a:0});
+  else if(a==="qdel"){D.lessons[i].q.splice(j,1)}
+  saveDraft();renderAll();
+});
+$("#tabs").addEventListener("click",e=>{
+  const t=e.target.dataset.t;if(!t)return;tabNow=t;
+  $$("#tabs button").forEach(b=>b.classList.toggle("on",b.dataset.t===t));
+  $$(".panel").forEach(p=>p.classList.toggle("on",p.id==="p-"+t));
+});
+
+function validate(){
+  const err=[];
+  if(!D.maqoms.length)err.push("Kamida 1 ta maqom bo'lsin.");
+  D.maqoms.forEach((m,i)=>{if(!m.n.trim())err.push((i+1)+"-maqom: nomi bo'sh.")});
+  if(!D.lessons.length)err.push("Kamida 1 ta dars bo'lsin.");
+  D.lessons.forEach((l,i)=>{
+    if(!l.t.trim())err.push((i+1)+"-dars: sarlavha bo'sh.");
+    if(!l.b.trim())err.push((i+1)+"-dars: dars matni bo'sh.");
+    if(!l.q.length)err.push((i+1)+"-dars: kamida 1 ta savol kerak.");
+    l.q.forEach((q,j)=>{
+      const n=q.o.filter(x=>x.trim()).length;
+      if(!q.q.trim())err.push((i+1)+"-dars, "+(j+1)+"-savol: savol matni bo'sh.");
+      if(n<2)err.push((i+1)+"-dars, "+(j+1)+"-savol: kamida 2 ta variant kerak.");
+      if(!(q.o[q.a]||"").trim())err.push((i+1)+"-dars, "+(j+1)+"-savol: to'g'ri javob bo'sh variantga belgilangan.");
+    });
+  });
+  return err;
+}
+function exportJson(){
+  const err=validate();
+  if(err.length){show("Yuklab olishdan oldin tuzating:\n- "+err.join("\n- "),"bad");scrollTo({top:0,behavior:"smooth"});return}
+  const out={settings:D.settings,
+    maqoms:D.maqoms.map((m,i)=>({n:m.n.trim(),i:i+1,c:m.c,t:m.t.trim(),info:m.info.trim()})),
+    lessons:D.lessons.map(l=>({t:l.t.trim(),s:l.s.trim(),b:l.b.trim(),q:l.q.map(q=>{
+      // bo'sh variantlarni olib tashlab, to'g'ri javob indeksini moslaymiz
+      const idx=[];q.o.forEach((o,k)=>{if(o.trim())idx.push(k)});
+      return {q:q.q.trim(),o:idx.map(k=>q.o[k].trim()),a:idx.indexOf(q.a)};
+    })}))};
+  const blob=new Blob([JSON.stringify(out,null,2)],{type:"application/json"});
+  const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="data.json";
+  document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),2000);
+  show("data.json yuklab olindi. Uni GitHub'dagi ilova papkasiga yuklang.","ok");
+}
+$("#imp").addEventListener("change",async e=>{
+  const f=e.target.files[0];if(!f)return;
+  try{const d=JSON.parse(await f.text());
+    if(!Array.isArray(d.maqoms)||!Array.isArray(d.lessons))throw 0;
+    D=norm(d);saveDraft();renderAll();show("Fayl yuklandi.","ok");
+  }catch(err){show("Bu to'g'ri data.json emas.","bad")}
+  e.target.value="";
+});
+async function resetFromServer(){
+  if(!confirm("Qoralama o'chirilib, serverdagi data.json yuklansinmi?"))return;
+  try{const r=await fetch("data.json?"+Date.now(),{cache:"no-store"});if(!r.ok)throw 0;
+    D=norm(await r.json());try{localStorage.removeItem(KEY)}catch(e){}renderAll();$("#status").textContent="";show("Serverdagi versiya yuklandi.","ok");
+  }catch(e){show("data.json ni o'qib bo'lmadi. Sahifa serverda ochilganmi?","bad")}
+}
+(async function init(){
+  let draft=null;try{draft=JSON.parse(localStorage.getItem(KEY))}catch(e){}
+  if(draft&&Array.isArray(draft.maqoms)){D=norm(draft);$("#status").textContent="· qoralama yuklandi";}
+  else{
+    try{const r=await fetch("data.json?"+Date.now(),{cache:"no-store"});D=norm(await r.json())}
+    catch(e){D=norm(DEFAULTS);show("data.json topilmadi. Import tugmasi bilan fayl yuklang.","bad")}
+  }
+  renderAll();
+})();
+</script>
+</body>
+</html>

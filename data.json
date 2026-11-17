@@ -1,0 +1,205 @@
+{
+  "settings": {
+    "lyricCost": 5,
+    "tokenPerCorrect": 1
+  },
+  "maqoms": [
+    {
+      "n": "Buzruk",
+      "i": 1,
+      "c": [
+        "#c9a227",
+        "#7a1f3d"
+      ],
+      "t": "Shashmaqomning birinchi maqomi",
+      "info": ""
+    },
+    {
+      "n": "Rost",
+      "i": 2,
+      "c": [
+        "#d4af37",
+        "#1f6f5c"
+      ],
+      "t": "Shashmaqomning ikkinchi maqomi",
+      "info": ""
+    },
+    {
+      "n": "Navo",
+      "i": 3,
+      "c": [
+        "#f6e08a",
+        "#4b2a7a"
+      ],
+      "t": "Shashmaqomning uchinchi maqomi",
+      "info": ""
+    },
+    {
+      "n": "Dugoh",
+      "i": 4,
+      "c": [
+        "#d4af37",
+        "#a8442b"
+      ],
+      "t": "Shashmaqomning to'rtinchi maqomi",
+      "info": ""
+    },
+    {
+      "n": "Segoh",
+      "i": 5,
+      "c": [
+        "#e8c85a",
+        "#1e4f8a"
+      ],
+      "t": "Shashmaqomning beshinchi maqomi",
+      "info": ""
+    },
+    {
+      "n": "Iroq",
+      "i": 6,
+      "c": [
+        "#d4af37",
+        "#5a2a62"
+      ],
+      "t": "Shashmaqomning oltinchi maqomi",
+      "info": ""
+    }
+  ],
+  "lessons": [
+    {
+      "t": "Shashmaqom nima?",
+      "s": "Asosiy tushuncha",
+      "b": "Shashmaqom — oltita maqomdan iborat katta musiqiy turkum. U Buxoroda shakllangan deb hisoblanadi. Har bir maqom ikki qismga bo'linadi: Mushkilot va Nasr.",
+      "q": [
+        {
+          "q": "Shashmaqom nechta maqomdan iborat?",
+          "o": [
+            "4",
+            "6",
+            "8",
+            "12"
+          ],
+          "a": 1
+        },
+        {
+          "q": "Maqom qaysi ikki qismga bo'linadi?",
+          "o": [
+            "Mushkilot va Nasr",
+            "Ashula va Raqs",
+            "Kirish va Yakun",
+            "Matla va Maqta"
+          ],
+          "a": 0
+        }
+      ]
+    },
+    {
+      "t": "Maqom nomlari",
+      "s": "Oltita maqom",
+      "b": "Shashmaqom tarkibi: Buzruk, Rost, Navo, Dugoh, Segoh va Iroq. Ularni shu tartibda yodlash foydali.",
+      "q": [
+        {
+          "q": "Quyidagilardan qaysi biri Shashmaqom tarkibiga kiradi?",
+          "o": [
+            "Rapsodiya",
+            "Segoh",
+            "Sonata",
+            "Nokturn"
+          ],
+          "a": 1
+        },
+        {
+          "q": "Shashmaqomdagi birinchi maqom qaysi?",
+          "o": [
+            "Iroq",
+            "Navo",
+            "Buzruk",
+            "Rost"
+          ],
+          "a": 2
+        }
+      ]
+    },
+    {
+      "t": "Cholg'ular",
+      "s": "Dutor, doira, nay",
+      "b": "Dutor — ikki torli cholg'u. Doira — zarbli cholg'u. Nay — damli cholg'u. Maqom ijrosida ular ko'pincha birga ishlatiladi.",
+      "q": [
+        {
+          "q": "Dutor necha torli?",
+          "o": [
+            "1",
+            "2",
+            "3",
+            "6"
+          ],
+          "a": 1
+        },
+        {
+          "q": "Doira qaysi guruh cholg'usi?",
+          "o": [
+            "Damli",
+            "Torli",
+            "Zarbli",
+            "Klavishli"
+          ],
+          "a": 2
+        }
+      ]
+    },
+    {
+      "t": "She'riyat shakllari",
+      "s": "G'azal va ruboiy",
+      "b": "Maqom ijrosida ko'pincha g'azal aytiladi. Ruboiy — to'rt misrali she'r. Alisher Navoiy eski o'zbek tilida ijod qilgan.",
+      "q": [
+        {
+          "q": "Ruboiy necha misradan iborat?",
+          "o": [
+            "2",
+            "4",
+            "6",
+            "8"
+          ],
+          "a": 1
+        },
+        {
+          "q": "Maqom ijrosida ko'pincha qaysi she'riy shakl aytiladi?",
+          "o": [
+            "G'azal",
+            "Roman",
+            "Hikoya",
+            "Doston-nasr"
+          ],
+          "a": 0
+        }
+      ]
+    },
+    {
+      "t": "Usul (ritm)",
+      "s": "Doira va usul",
+      "b": "Usul — musiqadagi ritmik qolip. Doira usulni ushlab turadi, ijrochi esa ohangni shu ritm ustiga quradi.",
+      "q": [
+        {
+          "q": "Usul nima?",
+          "o": [
+            "Ritmik qolip",
+            "Nota kaliti",
+            "Ovoz turi",
+            "Cholg'u nomi"
+          ],
+          "a": 0
+        },
+        {
+          "q": "Usulni ko'pincha qaysi cholg'u ushlab turadi?",
+          "o": [
+            "Nay",
+            "Doira",
+            "Dutor",
+            "Rubob"
+          ],
+          "a": 1
+        }
+      ]
+    }
+  ]
+}
