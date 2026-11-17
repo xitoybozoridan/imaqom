@@ -91,12 +91,13 @@ let D=null, tabNow="maqoms";
 
 const DEFAULTS={settings:{lyricCost:5,tokenPerCorrect:1},maqoms:[],lessons:[]};
 
+function ytId(u){const m=String(u||"").match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?(?:.*&)?v=|embed\/|shorts\/|live\/))([A-Za-z0-9_-]{11})/);return m?m[1]:null}
 function esc(s){return String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))}
 function show(t,kind){const m=$("#msg");m.className="msg "+kind;m.textContent=t;if(kind==="ok")setTimeout(()=>{m.className="msg"},3500)}
 function saveDraft(){try{localStorage.setItem(KEY,JSON.stringify(D));$("#status").textContent="· qoralama saqlandi"}catch(e){$("#status").textContent="· qoralama saqlanmadi"}}
 function norm(d){
   const o={settings:Object.assign({},DEFAULTS.settings,d&&d.settings),maqoms:[],lessons:[]};
-  (d&&d.maqoms||[]).forEach(m=>o.maqoms.push({n:m.n||"",t:m.t||"",info:m.info||"",c:[(m.c&&m.c[0])||"#d4af37",(m.c&&m.c[1])||"#4b2a7a"]}));
+  (d&&d.maqoms||[]).forEach(m=>o.maqoms.push({n:m.n||"",t:m.t||"",info:m.info||"",c:[(m.c&&m.c[0])||"#d4af37",(m.c&&m.c[1])||"#4b2a7a"],performers:(m.performers||[]).map(p=>({n:p.n||"",t:p.t||""})),audio:(m.audio||[]).map(x=>({t:x.t||"",u:x.u||""}))}));
   (d&&d.lessons||[]).forEach(l=>o.lessons.push({t:l.t||"",s:l.s||"",b:l.b||"",q:(l.q||[]).map(q=>({q:q.q||"",o:[0,1,2,3].map(k=>(q.o&&q.o[k])||""),a:Number.isInteger(q.a)?q.a:0}))}));
   return o;
 }
@@ -112,6 +113,12 @@ function renderMaqoms(){
     <label>Nomi</label><input type="text" data-p="maqoms.${i}.n" value="${esc(m.n)}">
     <label>Qisqa tavsif</label><input type="text" data-p="maqoms.${i}.t" value="${esc(m.t)}">
     <label>Tarix va ma'lumot (ilovada maqom sahifasida ko'rinadi)</label><textarea data-p="maqoms.${i}.info">${esc(m.info)}</textarea>
+    <label>Ijrochilar</label>
+    ${m.performers.map((p,j)=>`<div class="opt"><input type="text" data-p="maqoms.${i}.performers.${j}.n" value="${esc(p.n)}" placeholder="Ism"><input type="text" data-p="maqoms.${i}.performers.${j}.t" value="${esc(p.t)}" placeholder="Izoh (ixtiyoriy)"><button class="btn del sm" data-a="pdel" data-i="${i}" data-j="${j}">✕</button></div>`).join("")}
+    <div style="margin-top:8px"><button class="btn ghost sm" data-a="padd" data-i="${i}">+ Ijrochi</button></div>
+    <label>Audio (YouTube havolalari)</label>
+    ${m.audio.map((x,j)=>`<div class="opt"><input type="text" data-p="maqoms.${i}.audio.${j}.t" value="${esc(x.t)}" placeholder="Nomi"><input type="text" data-p="maqoms.${i}.audio.${j}.u" value="${esc(x.u)}" placeholder="https://youtu.be/..."><button class="btn del sm" data-a="adel" data-i="${i}" data-j="${j}">✕</button></div>`).join("")}
+    <div style="margin-top:8px"><button class="btn ghost sm" data-a="aadd" data-i="${i}">+ Audio</button></div>
     <div class="row2"><div><label>Rang 1</label><input type="color" data-p="maqoms.${i}.c.0" value="${esc(m.c[0])}"></div>
     <div><label>Rang 2</label><input type="color" data-p="maqoms.${i}.c.1" value="${esc(m.c[1])}"></div></div>
   </div>`).join("")+`<button class="btn" data-a="madd">+ Maqom qo'shish</button>`;
@@ -156,7 +163,11 @@ document.addEventListener("click",e=>{
   if(a==="mup")move(D.maqoms,i,-1);
   else if(a==="mdn")move(D.maqoms,i,1);
   else if(a==="mdel"){if(!confirm("Maqom o'chirilsinmi?"))return;D.maqoms.splice(i,1)}
-  else if(a==="madd")D.maqoms.push({n:"Yangi maqom",t:"",info:"",c:["#d4af37","#4b2a7a"]});
+  else if(a==="madd")D.maqoms.push({n:"Yangi maqom",t:"",info:"",c:["#d4af37","#4b2a7a"],performers:[],audio:[]});
+  else if(a==="padd")D.maqoms[i].performers.push({n:"",t:""});
+  else if(a==="pdel")D.maqoms[i].performers.splice(j,1);
+  else if(a==="aadd")D.maqoms[i].audio.push({t:"",u:""});
+  else if(a==="adel")D.maqoms[i].audio.splice(j,1);
   else if(a==="lup")move(D.lessons,i,-1);
   else if(a==="ldn")move(D.lessons,i,1);
   else if(a==="ldel"){if(!confirm("Dars o'chirilsinmi?"))return;D.lessons.splice(i,1)}
@@ -174,7 +185,9 @@ $("#tabs").addEventListener("click",e=>{
 function validate(){
   const err=[];
   if(!D.maqoms.length)err.push("Kamida 1 ta maqom bo'lsin.");
-  D.maqoms.forEach((m,i)=>{if(!m.n.trim())err.push((i+1)+"-maqom: nomi bo'sh.")});
+  D.maqoms.forEach((m,i)=>{if(!m.n.trim())err.push((i+1)+"-maqom: nomi bo'sh.");
+    m.audio.forEach((x,j)=>{if((x.t.trim()||x.u.trim())&&!ytId(x.u))err.push((i+1)+"-maqom, "+(j+1)+"-audio: to'g'ri YouTube havolasi kerak.")});
+    m.performers.forEach((p,j)=>{if(p.t.trim()&&!p.n.trim())err.push((i+1)+"-maqom, "+(j+1)+"-ijrochi: ism bo'sh.")});});
   if(!D.lessons.length)err.push("Kamida 1 ta dars bo'lsin.");
   D.lessons.forEach((l,i)=>{
     if(!l.t.trim())err.push((i+1)+"-dars: sarlavha bo'sh.");
@@ -193,7 +206,7 @@ function exportJson(){
   const err=validate();
   if(err.length){show("Yuklab olishdan oldin tuzating:\n- "+err.join("\n- "),"bad");scrollTo({top:0,behavior:"smooth"});return}
   const out={settings:D.settings,
-    maqoms:D.maqoms.map((m,i)=>({n:m.n.trim(),i:i+1,c:m.c,t:m.t.trim(),info:m.info.trim()})),
+    maqoms:D.maqoms.map((m,i)=>({n:m.n.trim(),i:i+1,c:m.c,t:m.t.trim(),info:m.info.trim(),performers:m.performers.filter(p=>p.n.trim()).map(p=>({n:p.n.trim(),t:p.t.trim()})),audio:m.audio.filter(x=>ytId(x.u)).map(x=>({t:x.t.trim(),u:x.u.trim()}))})),
     lessons:D.lessons.map(l=>({t:l.t.trim(),s:l.s.trim(),b:l.b.trim(),q:l.q.map(q=>{
       // bo'sh variantlarni olib tashlab, to'g'ri javob indeksini moslaymiz
       const idx=[];q.o.forEach((o,k)=>{if(o.trim())idx.push(k)});

@@ -334,7 +334,7 @@ function star(m, size){
 function toast(t){ const e=$("#toast"); e.textContent=t; e.classList.add("show"); setTimeout(()=>e.classList.remove("show"),1800); }
 function setTokens(){ $("#tokens").textContent=S.tokens; $("#tokens2").textContent=S.tokens; save(); }
 function openModal(h){ $("#sheet").innerHTML=h; $("#modal").classList.add("show"); }
-function closeModal(){ $("#modal").classList.remove("show"); }
+function closeModal(){ $("#modal").classList.remove("show"); $("#sheet").innerHTML=""; }
 function esc(s){ return String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])); }
 
 /* ====== NAVIGATSIYA ====== */
@@ -366,12 +366,33 @@ function renderMaqoms(){ $("#mq-home").innerHTML = MAQOMS.map(m=>`<div class="m"
 $("#mq-list").innerHTML = MAQOMS.map(m=>`<div class="row" onclick="showMaqom(${m.i-1})">${star(m)}<div class="i"><b>${m.n}</b><span>${m.t}</span></div><span class="chev">›</span></div>`).join(""); }
 renderMaqoms();
 
+function ytId(u){
+  const m=String(u||"").match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?(?:.*&)?v=|embed\/|shorts\/|live\/))([A-Za-z0-9_-]{11})/);
+  return m?m[1]:null;
+}
+function perfHtml(m){
+  const a=(m.performers||[]).filter(p=>p&&p.n);
+  if(!a.length) return "";
+  return `<div class="card"><b>Ijrochilar</b>${a.map(p=>`<div style="margin-top:8px"><span style="color:var(--gold2);font-weight:600">${esc(p.n)}</span>${p.t?`<div class="muted">${esc(p.t)}</div>`:""}</div>`).join("")}</div>`;
+}
+function audioHtml(k){
+  const a=(MAQOMS[k].audio||[]).filter(x=>x&&ytId(x.u));
+  if(!a.length) return "";
+  return `<div class="card"><b>Audio</b>${a.map((x,j)=>`<div id="trk-${j}"><button class="opt" style="margin:8px 0 0;display:flex;gap:10px;align-items:center" onclick="playTrack(${k},${j})"><span style="color:var(--gold2)">&#9654;</span><span>${esc(x.t||("Yozuv "+(j+1)))}</span></button></div>`).join("")}<div class="note">Audio YouTube orqali ijro etiladi, internet kerak.</div></div>`;
+}
+function playTrack(k,j){
+  const x=(MAQOMS[k].audio||[]).filter(x=>x&&ytId(x.u))[j]; if(!x) return;
+  const id=ytId(x.u), box=document.getElementById("trk-"+j); if(!box) return;
+  box.innerHTML=`<div style="margin-top:8px;border-radius:14px;overflow:hidden;aspect-ratio:16/9;background:#000"><iframe src="https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0&playsinline=1" style="width:100%;height:100%;border:0" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen title="${esc(x.t||"Audio")}"></iframe></div><a class="muted" style="display:inline-block;margin-top:6px" href="https://www.youtube.com/watch?v=${id}" target="_blank" rel="noopener">YouTube'da ochish &rsaquo;</a>`;
+}
+
 function showMaqom(k){
   const m=MAQOMS[k];
   openModal(`<div style="text-align:center"><div style="width:110px;margin:0 auto">${star(m)}</div>
   <h1 style="margin:10px 0 4px">${esc(m.n)}</h1><div class="muted">${esc(m.t)}</div></div>
   <div class="card" style="margin-top:18px"><b>Tuzilishi</b><p style="margin:6px 0 0">Har bir maqom ikki qismdan iborat: Mushkilot va Nasr.</p></div>
   ${m.info?`<div class="card"><b>Tarix va ma'lumot</b><p style="margin:6px 0 0;white-space:pre-wrap">${esc(m.info)}</p></div>`:`<div class="card"><b>Tarix, ijrochilar, audio</b><p class="muted" style="margin:6px 0 0">Bu bo'lim mutaxassis tomonidan tekshirilgan ma'lumot bilan to'ldiriladi.</p></div>`}
+  ${perfHtml(m)}${audioHtml(k)}
   <button class="btn" style="width:100%" onclick="closeModal();go('lessons')">Darslarga o'tish</button>`);
 }
 
