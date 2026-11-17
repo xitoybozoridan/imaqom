@@ -14,7 +14,12 @@
       "t": "Shashmaqomning birinchi maqomi",
       "info": "",
       "performers": [],
-      "audio": []
+      "audio": [
+        {
+          "t": "Test",
+          "u": "https://youtu.be/2X9QuJ30va4?si=lyNIfHdOBqclNMIt"
+        }
+      ]
     },
     {
       "n": "Rost",
@@ -26,7 +31,12 @@
       "t": "Shashmaqomning ikkinchi maqomi",
       "info": "",
       "performers": [],
-      "audio": []
+      "audio": [
+        {
+          "t": "Test2",
+          "u": "https://youtu.be/hEgBS7bQPo8?si=b7TLO4FMqEVCEQdU"
+        }
+      ]
     },
     {
       "n": "Navo",
